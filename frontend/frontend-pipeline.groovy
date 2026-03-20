@@ -18,6 +18,7 @@ pipeline{
         stage('deploy'){
             steps{
                 sh '''
+                    cd frontend
                     aws s3 sync dist/ s3://cblkdfsfdsc-front12end-project-bux/
                 '''
             }
