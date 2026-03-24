@@ -16,15 +16,40 @@ spec:
         app: flight-reservation-app
     spec:
       containers:
-      - name: flight-reservation-app
-        image: sakshik123/fightapp:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "250m"
-          limits:
-            memory: "1Gi"
-            cpu: "500m"
+- name: flight-reservation-app
+  image: sakshik123/fightapp:latest
+  imagePullPolicy: Always
+  ports:
+  - containerPort: 8080
+
+  env:
+  - name: SPRING_DATASOURCE_URL
+    value: jdbc:mysql://terraform-20260324073610942900000002.cp2w4gy8s1n4.us-west-1.rds.amazonaws.com:3306/flightdb?createDatabaseIfNotExist=true
+
+  - name: SPRING_DATASOURCE_USERNAME
+    value: admin
+
+  - name: SPRING_DATASOURCE_PASSWORD
+    value: Redhat123
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 10
+
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 30
+    periodSeconds: 10
